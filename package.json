@@ -11,7 +11,9 @@
   "dependencies": {
     "axios": "^0.19.0",
     "core-js": "^3.4.3",
+    "crypto-js": "^4.0.0",
     "iview": "^3.5.4",
+    "jsencrypt": "^3.0.0-rc.1",
     "path-to-regexp": "^6.1.0",
     "vue": "^2.6.10",
     "vue-router": "^3.1.3",

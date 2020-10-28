@@ -2,12 +2,40 @@ import axios from 'axios'
 
 import url from './url'
 import router from '../router'
+import * as aeshelper from './aeshelper'
+
+// todo 这里生成随机key
+function getRandKey() {
+    const randomStr = Math.random().toString(36).substr(2, 6)
+    return randomStr
+}
+const key = getRandKey()
+// todo 获取加密token
+function getToken(key) {
+    const tokenValue = aeshelper.RsaEncrypt(key)
+    if (tokenValue.length !== 512) {
+        const key = this.getRandKey()
+        this.getToken(key)
+        return
+    }
+    return tokenValue
+}
+// 解密得到的结果
+function pipedata(result) {
+    const content = aeshelper.SignAndDecrypt(
+        result.data,
+        result.sign,
+        key
+    )
+    return JSON.parse(content)
+}
+
 const ajax = axios.create({
     baseURL: url, // 请求地址
     timeout: 30000 // 请求超时
 })
 let requestNum = 0 // 请求的数量
-ajax.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8' // post 的 请求头设置
+ajax.defaults.headers.post['Content-Type'] = 'application/json' // post 的 请求头设置
 // 请求拦截
 ajax.interceptors.request.use(config => {
     // 每次请求之前判断vuex中的token是否存在（也可以存在stroge里面）
@@ -15,6 +43,8 @@ ajax.interceptors.request.use(config => {
     // 即使存在token，也有可能过期，所以在响应拦截中也要判断状态
     const token = localStorage.getItem('token')
     token && (config.headers.Authorization = 'Bearer' + token) // jwt验证
+    // 加密
+    config.headers.token = getToken(key)
     // 全局loading
     if (requestNum === 0) {
         console.log('展示loading')
@@ -95,4 +125,40 @@ ajax.interceptors.response.use(
     }
 )
 
-export default ajax
+/**
+ * get方法，对应get请求
+ * @param {String} url [请求的url地址]
+ * @param {Object} params [请求时携带的参数]
+ */
+export function get(url, params) {
+    return new Promise((resolve, reject) => {
+        ajax.get(url, params)
+            .then(res => {
+                resolve(res.data)
+            })
+            .catch(err => {
+                reject(err.data)
+            })
+    })
+}
+/**
+ * post方法，对应post请求
+ * @param {String} url [请求的url地址]
+ * @param {Object} params [请求时携带的参数]
+ */
+export function post(url, params) {
+    return new Promise((resolve, reject) => {
+        console.log(key)
+        const dataStr = JSON.stringify(params)
+        const dataStrAes = aeshelper.AesEncrypt(dataStr, key) // 加密后的传输数据
+        ajax.post(url, dataStrAes)
+            .then(res => {
+                console.log(res)
+                resolve(pipedata(res.data))
+                // resolve(res.data)
+            })
+            .catch(err => {
+                reject(err.data)
+            })
+    })
+}

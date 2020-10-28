@@ -172,6 +172,16 @@ export const asyncRouter = [
                 },
                 name: 'list_info',
                 component: () => import('@/views/list/list')
+            },
+            {
+                path: 'add_form',
+                meta: {
+                    title: '表单',
+                    roles: ['editor']
+                },
+                hidden: true,
+                name: 'add_form',
+                component: () => import('@/views/form/form')
             }
 
         ]

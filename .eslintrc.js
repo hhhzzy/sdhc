@@ -62,7 +62,7 @@ module.exports = {
         "html": {
           "void": "always",
           "normal": "never",
-          "component": "always"
+        //   "component": "always"
         },
         "svg": "always",
         "math": "always"

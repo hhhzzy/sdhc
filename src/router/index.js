@@ -16,11 +16,13 @@ router.beforeEach(async(to, from, next) => {
              * 2.有：已经登录成功 => 只需要跳转路由
              */
             const hasRole = store.state.user.roles && store.state.user.roles.length > 0
+            console.log(hasRole)
             if (hasRole) {
                 next()
             } else {
                 // 获取用户角色
-                const { roles } = (await store.dispatch('user/getUserInfo', hasToken)).data
+                const { roles } = (await store.dispatch('user/getUserInfo', hasToken))
+                console.log(roles, '99999')
                 // 根据角色权限动态获取路由
                 await store.dispatch('permission/getAddRouters', roles)
                 const accessRoutes = store.state.permission.routes

@@ -23,8 +23,9 @@ const actions = {
         return new Promise((resolve, reject) => {
             login({ username: userName, password: password })
                 .then(res => {
-                    commit('SET_TOKENS', res.data.token)
-                    setToken(res.data.token)
+                    console.log(res)
+                    commit('SET_TOKENS', res)
+                    setToken(res)
                     resolve(res)
                 }, err => {
                     reject(err)
@@ -36,8 +37,11 @@ const actions = {
             getUserInfo(data)
                 .then(res => {
                     console.log(res)
-                    commit('SET_USERS', res.data)
-                    commit('SET_ROLES', res.data.roles)
+                    // 添加临时的角色权限
+                    res.roles = ['admin']
+
+                    commit('SET_USERS', res)
+                    commit('SET_ROLES', res.roles ? res.roles : [])
                     resolve(res)
                 }, err => {
                     console.log(err)

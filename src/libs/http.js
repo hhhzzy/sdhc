@@ -3,6 +3,7 @@ import axios from 'axios'
 import url from './url'
 import router from '../router'
 import * as aeshelper from './aeshelper'
+import { Message } from 'iview'
 
 // todo 这里生成随机key
 function getRandKey() {
@@ -41,7 +42,7 @@ ajax.interceptors.request.use(config => {
     // 每次请求之前判断vuex中的token是否存在（也可以存在stroge里面）
     // 如果存在，则统一在请求的header中加上token，后台判断是否登录
     // 即使存在token，也有可能过期，所以在响应拦截中也要判断状态
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('hzy_admin')
     token && (config.headers.Authorization = 'Bearer' + token) // jwt验证
     // 加密
     config.headers.token = getToken(key)
@@ -61,6 +62,9 @@ ajax.interceptors.response.use(
         requestNum--
         if (requestNum === 0) {
             console.log('隐藏loading')
+        }
+        if (response.data.errorInfo) {
+            Message.error(response.data.errorInfo)
         }
         return response
     },
@@ -128,13 +132,13 @@ ajax.interceptors.response.use(
 /**
  * get方法，对应get请求
  * @param {String} url [请求的url地址]
- * @param {Object} params [请求时携带的参数]
+ * @param {Object} data [请求时携带的参数]
  */
-export function get(url, params) {
+export function get(url, data) {
     return new Promise((resolve, reject) => {
-        ajax.get(url, params)
+        ajax.get(url, { params: data })
             .then(res => {
-                resolve(res.data)
+                resolve(pipedata(res.data))
             })
             .catch(err => {
                 reject(err.data)
@@ -155,10 +159,11 @@ export function post(url, params) {
             .then(res => {
                 console.log(res)
                 resolve(pipedata(res.data))
-                // resolve(res.data)
             })
             .catch(err => {
                 reject(err.data)
             })
     })
 }
+
+// export default ajax;

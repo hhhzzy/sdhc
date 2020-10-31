@@ -5,5 +5,5 @@ export function login(data) {
     return post('/api/User/login', data)
 }
 export function getUserInfo(data) {
-    return get('/api/User', data)
+    return get('/api/User')
 }

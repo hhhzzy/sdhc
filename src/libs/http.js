@@ -4,6 +4,7 @@ import url from './url'
 import router from '../router'
 import * as aeshelper from './aeshelper'
 import { Message } from 'iview'
+import { removeToken } from './token'
 
 // todo 这里生成随机key
 function getRandKey() {
@@ -43,7 +44,7 @@ ajax.interceptors.request.use(config => {
     // 如果存在，则统一在请求的header中加上token，后台判断是否登录
     // 即使存在token，也有可能过期，所以在响应拦截中也要判断状态
     const token = localStorage.getItem('hzy_admin')
-    token && (config.headers.Authorization = 'Bearer' + token) // jwt验证
+    token && (config.headers.Authorization = 'Bearer ' + token) // jwt验证
     // 加密
     config.headers.token = getToken(key)
     // 全局loading
@@ -65,6 +66,15 @@ ajax.interceptors.response.use(
         }
         if (response.data.errorInfo) {
             Message.error(response.data.errorInfo)
+            if (response.data.statusCode === 401) {
+                console.log(router)
+                // 移除token
+                removeToken()
+                router.push({
+                    path: `/login` // 退出后重新登录回到当前页面
+                })
+                console.log(response.data.statusCode)
+            }
         }
         return response
     },
@@ -136,7 +146,14 @@ ajax.interceptors.response.use(
  */
 export function get(url, data) {
     return new Promise((resolve, reject) => {
-        ajax.get(url, { params: data })
+        // ajax.get(url, { params: data })
+        //     .then(res => {
+        //         resolve(pipedata(res.data))
+        //     })
+        //     .catch(err => {
+        //         reject(err.data)
+        //     })
+        ajax(url)
             .then(res => {
                 resolve(pipedata(res.data))
             })

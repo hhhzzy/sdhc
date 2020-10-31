@@ -6,6 +6,8 @@ import iView from 'iview'
 import store from './store/index'
 import Router from './router/index'
 import 'iview/dist/styles/iview.css'
+import moment from 'moment'// 导入文件
+Vue.prototype.$moment = moment// 赋值使用
 require('../mock/mock')
 
 Vue.config.productionTip = false

@@ -1,6 +1,7 @@
 <template>
     <div class="login">
         <div class="login-con">
+            <p class="title">重庆市实地核查工作填报系统</p>
             <Card icon="log-in" title="欢迎登录" :bordered="false">
                 <div class="form-con">
                     <Form ref="loginForm" :model="form" :rules="rules" @keydown.enter.native="handleSubmit">
@@ -70,12 +71,7 @@ export default {
     }
 }
 </script>
-<style lang="less" scoped>
-html,body{
-    height: 100%;
-    width: 100%;
-}
-
+<style lang="less" >
 .login{
     width: 100%;
     height: 100%;
@@ -87,9 +83,9 @@ html,body{
         right: 160px;
         top: 50%;
         left: 50%;
-        margin-left: -150px;
+        margin-left: -450px;
         transform: translateY(-60%);
-        width: 300px;
+        width: 900px;
         &-header{
             font-size: 16px;
             font-weight: 300;
@@ -104,7 +100,32 @@ html,body{
             text-align: center;
             color: #c3c3c3;
         }
+        .ivu-card{
+            width: 450px;
+            margin-top: 20px;
+            transform: translateX(50%);
+            // .ivu-card-head{
+            //     p{
+            //         height: 36px;
+            //         margin: 15px 0;
+            //         text-align: center;
+            //     }
+            //     span{
+            //         font-size: 24px;
+            //         color: #666;
+            //         margin: 30px 0;
+            //         text-align: center;
+            //     }
+            // }
+        }
+    }
+ .title{
+        font-family: 'Arvo Bold', 'Arvo';
+        font-weight: 700;
+        font-style: normal;
+        font-size: 38px;
+        color: #fff;
+        text-align: center;
     }
 }
-
 </style>

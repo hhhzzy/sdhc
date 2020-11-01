@@ -115,45 +115,6 @@ export const constRouter = [
  */
 export const asyncRouter = [
     {
-        path: '/sys',
-        component: () => import('@/layout/index'),
-        meta: {
-            roles: ['editor'],
-            title: '设置',
-            icon: 'md-settings'
-        },
-        name: 'sys',
-        children: [
-            {
-                path: 'user',
-                component: () => import('@/views/sys/user'),
-                meta: {
-                    roles: ['admin'],
-                    title: '用户'
-                },
-                name: 'user'
-            },
-            {
-                path: 'setting',
-                component: () => import('@/views/sys/setting'),
-                meta: {
-                    roles: ['editor'],
-                    title: '编辑角色'
-                },
-                name: 'setting'
-            },
-            {
-                path: 'role',
-                component: () => import('@/views/sys/role'),
-                meta: {
-                    roles: ['admin'],
-                    title: 'admin角色'
-                },
-                name: 'role'
-            }
-        ]
-    },
-    {
         path: '/list',
         component: () => import('@/layout/index'),
         meta: {
@@ -185,7 +146,69 @@ export const asyncRouter = [
             }
 
         ]
+    },
+    {
+        path: '/count',
+        component: () => import('@/layout/index'),
+        meta: {
+            roles: ['admin', 'editor'],
+            title: '统计',
+            icon: 'ios-folder',
+            breadcrumb: false
+        },
+        name: 'count',
+        children: [
+            {
+                path: 'count_list',
+                meta: {
+                    title: '统计表',
+                    roles: ['editor']
+                },
+                name: 'count_list',
+                component: () => import('@/views/count/count')
+            }
+        ]
+    },
+    {
+        path: '/sys',
+        component: () => import('@/layout/index'),
+        meta: {
+            roles: ['editor'],
+            title: '设置',
+            icon: 'md-settings'
+        },
+        name: 'sys',
+        children: [
+            {
+                path: 'user',
+                component: () => import('@/views/sys/user'),
+                meta: {
+                    roles: ['admin'],
+                    title: '用户管理'
+                },
+                name: 'user'
+            },
+            // {
+            //     path: 'setting',
+            //     component: () => import('@/views/sys/setting'),
+            //     meta: {
+            //         roles: ['editor'],
+            //         title: '编辑角色'
+            //     },
+            //     name: 'setting'
+            // },
+            {
+                path: 'role',
+                component: () => import('@/views/sys/role'),
+                meta: {
+                    roles: ['admin'],
+                    title: '角色管理'
+                },
+                name: 'role'
+            }
+        ]
     }
+
 ]
 /**
  *创建路由

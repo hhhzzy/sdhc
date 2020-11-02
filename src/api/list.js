@@ -17,3 +17,7 @@ export function CreateProject(data) {
 export function GetMyProjects(data) {
     return post('/api/MineCheck/GetMyProjectsAsync', data)
 }
+// 提交核查项目
+export function SubmitProject(data) {
+    return get('/api/MineCheck/SubmitProjectAsync/' + data)
+}

@@ -6,21 +6,17 @@
                 <div class="form-con">
                     <Form ref="loginForm" :model="form" :rules="rules" @keydown.enter.native="handleSubmit">
                         <FormItem prop="userName">
-                            <Input v-model="form.userName" placeholder="请输入用户名" />
-                            <span slot="prepend">
-                                <Icon :size="16" type="ios-person" />
-                            </span>
-                            </Input>
+                            <i-input v-model="form.userName" placeholder="请输入用户名" size="large" autocomplete="off">
+                                <Icon slot="prefix" type="ios-person" />
+                            </i-input>
                         </FormItem>
                         <FormItem prop="password">
-                            <Input v-model="form.password" type="password" placeholder="请输入密码" />
-                            <span slot="prepend">
-                                <Icon :size="14" type="md-lock" />
-                            </span>
-                            </Input>
+                            <i-input v-model="form.password" type="password" placeholder="请输入密码" size="large" autocomplete="off">
+                                <Icon slot="prefix" type="md-lock" />
+                            </i-input>
                         </FormItem>
                         <FormItem>
-                            <Button type="primary" long @click="handleSubmit">登录</Button>
+                            <Button size="large" type="primary" long @click="handleSubmit">登录</Button>
                         </FormItem>
                     </Form>
                     <p class="login-tip">输入用户名和密码</p>
@@ -53,7 +49,6 @@ export default {
             handler: function(route) {
                 const query = route.query
                 if (query) {
-                    console.log(query.redirect)
                     this.redirect = query.redirect
                 }
             },
@@ -94,6 +89,20 @@ export default {
         }
         .form-con{
             padding: 10px 0 0;
+            width: 350px;
+            margin: 0 auto;
+            input:-webkit-autofill,
+            textarea:-webkit-autofill,
+            select:-webkit-autofill {
+                -webkit-box-shadow: 0 0 0 1000px white inset;
+                -webkit-text-fill-color: #333;
+            }
+            .ivu-input-large{
+                    height: 40px;
+            }
+            .ivu-input-wrapper-large .ivu-input-prefix i, .ivu-input-wrapper-large .ivu-input-suffix i{
+                line-height: 40px;
+            }
         }
         .login-tip{
             font-size: 10px;

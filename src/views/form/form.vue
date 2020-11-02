@@ -394,7 +394,7 @@
                             <i-col span="24">
                                 <FormItem label="界外情况：">
                                     <div style="overflow:hidden;margin-bottom:5px;">
-                                        <Checkbox v-model="developUse.isCrossTheBorder" :disabled="developUse.isRoadway || developUse.isSuperHigh || developUse.islastYearRegion">不存在越界行为</Checkbox>
+                                        <Checkbox v-model="developUse.isCrossTheBorder" :disabled="developUse.isStripPositions || developUse.isRoadway || developUse.isSuperHigh || developUse.islastYearRegion">不存在越界行为</Checkbox>
                                         <Checkbox v-model="developUse.isStripPositions" :disabled="developUse.isCrossTheBorder">存在疑似越界剥离表土行为</Checkbox>
                                         <Checkbox v-model="developUse.isRoadway" :disabled="developUse.isCrossTheBorder">存在疑似越界布置井巷工程行为</Checkbox>
                                         <Checkbox v-model="developUse.isSuperHigh" :disabled="developUse.isCrossTheBorder">井口标高超过许可证标高</Checkbox>

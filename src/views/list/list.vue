@@ -92,7 +92,7 @@
     </div>
 </template>
 <script>
-import { GetAllRegion, CreateProject, Dictionary, GetMyProjects } from '@/api/list'
+import { GetAllRegion, CreateProject, Dictionary, GetMyProjects, SubmitProject } from '@/api/list'
 export default {
     components: {
     },
@@ -169,7 +169,104 @@ export default {
                 },
                 {
                     title: '数据填报状态',
-                    key: 'dataStatusDesc'
+                    key: 'dataStatusDesc',
+                    render: (h, params) => {
+                        console.log(params.row.dataStatusDesc)
+                        let str = null
+                        if (params.row.dataStatusDesc === '审核不通过') {
+                            str = h('Tooltip', {
+                                props: {
+                                    placement: 'top-start',
+                                    transfer: true
+                                },
+                                style: {
+                                    color: '#1890ff'
+                                }
+                            }, [params.row.dataStatusDesc,
+                                h('div', {
+                                    slot: 'content',
+                                    style: {
+                                        whiteSpace: 'normal'
+                                    }
+                                }, '审核驳回人：' + (params.row.auditUser ? params.row.auditUser.name : '')),
+                                h('div', {
+                                    slot: 'content',
+                                    style: {
+                                        whiteSpace: 'normal'
+                                    }
+                                }, '驳回时间：' + this.$moment(params.row.auditTimeLocal).format('YYYY-MM-DD')),
+                                h('div', {
+                                    slot: 'content',
+                                    style: {
+                                        whiteSpace: 'normal'
+                                    }
+                                }, '驳回意见：' + (params.row.auditNotPassReason ? params.row.auditNotPassReason : ''))
+                            ])
+                        } else if (params.row.dataStatusDesc === '检查不通过') {
+                            str = h('Tooltip', {
+                                props: {
+                                    placement: 'top-start',
+                                    transfer: true
+                                },
+                                style: {
+                                    color: '#1890ff'
+                                }
+                            }, [params.row.dataStatusDesc,
+                                h('div', {
+                                    slot: 'content',
+                                    style: {
+                                        whiteSpace: 'normal'
+                                    }
+                                }, '检查驳回人：' + (params.row.checkUser ? params.row.checkUser.name : '')),
+                                h('div', {
+                                    slot: 'content',
+                                    style: {
+                                        whiteSpace: 'normal'
+                                    }
+                                }, '驳回时间：' + this.$moment(params.row.checkTimeLocal).format('YYYY-MM-DD')),
+                                h('div', {
+                                    slot: 'content',
+                                    style: {
+                                        whiteSpace: 'normal'
+                                    }
+                                }, '驳回意见：' + (params.row.checkNotPassReason ? params.row.checkNotPassReason : ''))
+                            ])
+                        } else if (params.row.dataStatusDesc === '区县检查不通过') {
+                            str = h('Tooltip', {
+                                props: {
+                                    placement: 'top-start',
+                                    transfer: true
+                                },
+                                style: {
+                                    color: '#1890ff'
+                                }
+                            }, [params.row.dataStatusDesc,
+                                h('div', {
+                                    slot: 'content',
+                                    style: {
+                                        whiteSpace: 'normal'
+                                    }
+                                }, '检查驳回人：' + (params.row.qxCheckUser ? params.row.qxCheckUser.name : '')),
+                                h('div', {
+                                    slot: 'content',
+                                    style: {
+                                        whiteSpace: 'normal'
+                                    }
+                                }, '驳回时间：' + this.$moment(params.row.qxCheckTimeLocal).format('YYYY-MM-DD')),
+                                h('div', {
+                                    slot: 'content',
+                                    style: {
+                                        whiteSpace: 'normal'
+                                    }
+                                }, '驳回意见：' + (params.row.qxCheckNotPassReason ? params.row.qxCheckNotPassReason : ''))
+                            ])
+                        } else {
+                            str = h('div', params.row.dataStatusDesc)
+                        }
+                        return h('div', [
+                            str
+                        ])
+                    }
                 },
                 {
                     title: '操作',
@@ -181,7 +278,8 @@ export default {
                                     size: 'small'
                                 },
                                 style: {
-                                    marginRight: '5px'
+                                    marginRight: '5px',
+                                    display: params.row.dataStatusDesc === '填报中' || params.row.dataStatusDesc === '审核驳回' ? '' : 'none'
                                 },
                                 on: {
                                     click: () => {
@@ -203,11 +301,48 @@ export default {
                                     size: 'small'
                                 },
                                 style: {
-                                    marginRight: '5px'
+                                    marginRight: '5px',
+                                    display: params.row.dataStatusDesc === '已提交' || params.row.dataStatusDesc === '检查不通过' ? '' : 'none'
                                 },
                                 on: {
                                     click: () => {
-                                        this.show(params.index)
+                                        console.log(params)
+                                        this.$router.push({
+                                            path: '/list/add_form',
+                                            query: {
+                                                type: params.row.checkType, // 这是传的参数
+                                                id: params.row.id,
+                                                boolEdit: true
+                                            }
+                                        })
+                                    }
+                                }
+                            }, '修改'),
+                            h('Button', {
+                                props: {
+                                    type: 'primary',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px',
+                                    display: params.row.dataStatusDesc === '填报中' ? '' : 'none'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.$Modal.confirm({
+                                            title: '提示',
+                                            content: '是否确认提交该条数据？',
+                                            cancelText: '取消',
+                                            onOk: () => {
+                                                SubmitProject({ userName: params.row.name }).then(res => {
+                                                    if (res) {
+                                                        this.$Message.success('提交成功!')
+                                                        this.userModel = false
+                                                        this.GetUser()
+                                                    }
+                                                })
+                                            }
+                                        })
                                     }
                                 }
                             }, '提交'),

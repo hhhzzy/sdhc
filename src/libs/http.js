@@ -38,6 +38,8 @@ const ajax = axios.create({
 })
 let requestNum = 0 // 请求的数量
 ajax.defaults.headers.post['Content-Type'] = 'application/json' // post 的 请求头设置
+ajax.defaults.headers.put['Content-Type'] = 'application/json' // put 的 请求头设置
+ajax.defaults.headers.delete['Content-Type'] = 'application/json' // delete 的 请求头设置
 // 请求拦截
 ajax.interceptors.request.use(config => {
     // 每次请求之前判断vuex中的token是否存在（也可以存在stroge里面）
@@ -80,7 +82,6 @@ ajax.interceptors.response.use(
     },
     // 状态码提示
     (err) => {
-        console.log(err)
         if (err && err.response) {
             switch (err.response.status) {
             case 400:
@@ -146,14 +147,7 @@ ajax.interceptors.response.use(
  */
 export function get(url, data) {
     return new Promise((resolve, reject) => {
-        // ajax.get(url, { params: data })
-        //     .then(res => {
-        //         resolve(pipedata(res.data))
-        //     })
-        //     .catch(err => {
-        //         reject(err.data)
-        //     })
-        ajax(url)
+        ajax.get(url, { params: data })
             .then(res => {
                 resolve(pipedata(res.data))
             })
@@ -169,12 +163,10 @@ export function get(url, data) {
  */
 export function post(url, params) {
     return new Promise((resolve, reject) => {
-        console.log(key)
         const dataStr = JSON.stringify(params)
         const dataStrAes = aeshelper.AesEncrypt(dataStr, key) // 加密后的传输数据
         ajax.post(url, dataStrAes)
             .then(res => {
-                console.log(res)
                 resolve(pipedata(res.data))
             })
             .catch(err => {
@@ -183,12 +175,11 @@ export function post(url, params) {
     })
 }
 /**
- * get方法，对应get请求
+ * del方法，对应delete请求，path传参数
  * @param {String} url [请求的url地址]
  * @param {Object} data [请求时携带的参数]
  */
 export function del(url, data) {
-    console.log(url)
     return new Promise((resolve, reject) => {
         ajax.delete(url)
             .then(res => {
@@ -199,4 +190,41 @@ export function del(url, data) {
             })
     })
 }
-// export default ajax;
+/**
+ * delete方法，对应delete请求
+ * @param {String} url [请求的url地址]
+ * @param {Object} data [请求时携带的参数]
+ */
+export function delPost(url, params) {
+    return new Promise((resolve, reject) => {
+        const dataStr = JSON.stringify(params)
+        const dataStrAes = aeshelper.AesEncrypt(dataStr, key) // 加密后的传输数据
+        console.log(dataStrAes)
+        ajax.delete(url, { data: dataStrAes })
+            .then(res => {
+                resolve(pipedata(res.data))
+            })
+            .catch(err => {
+                reject(err.data)
+            })
+    })
+}
+/**
+ * put方法，对应put请求
+ * @param {String} url [请求的url地址]
+ * @param {Object} data [请求时携带的参数]
+ */
+export function put(url, params) {
+    return new Promise((resolve, reject) => {
+        const dataStr = JSON.stringify(params)
+        const dataStrAes = aeshelper.AesEncrypt(dataStr, key) // 加密后的传输数据
+        ajax.put(url, dataStrAes)
+            .then(res => {
+                resolve(pipedata(res.data))
+            })
+            .catch(err => {
+                reject(err.data)
+            })
+    })
+}
+export default ajax

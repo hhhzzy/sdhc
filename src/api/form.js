@@ -10,6 +10,5 @@ export function SaveProject(data) {
 }
 // 删除核查资料
 export function DeleteAttach(data) {
-    console.log(data)
     return del('/api/MineCheck/Deleteattach/' + data)
 }

@@ -101,6 +101,7 @@
 }
 .menu-collapsed .ivu-tooltip-rel {
   width: 100%;
+  text-align: center;
 }
 .menu-collapsed .menu-collapsed-item {
   max-width: 250px;

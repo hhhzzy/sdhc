@@ -29,30 +29,30 @@ export const constRouter = [
         hidden: true,
         name: 'login',
         component: () => import('@/views/login/login')
-    },
-    {
-        path: '/',
-        meta: {
-            title: '首页',
-            icon: 'md-home'
-        },
-        component: () => import('@/layout/index'),
-        redirect: '/home',
-        name: 'Home',
-        children: [
-            {
-                path: 'home',
-                component: () => import('@/views/home/home'),
-                name: 'Home',
-                meta: {
-                    title: '首页',
-                    icon: 'md-home',
-                    affix: true,
-                    breadcrumb: false
-                }
-            }
-        ]
     }
+    // {
+    //     path: '/',
+    //     meta: {
+    //         title: '首页',
+    //         icon: 'md-home'
+    //     },
+    //     component: () => import('@/layout/index'),
+    //     redirect: '/home',
+    //     name: 'Home',
+    //     children: [
+    //         {
+    //             path: 'home',
+    //             component: () => import('@/views/home/home'),
+    //             name: 'Home',
+    //             meta: {
+    //                 title: '首页',
+    //                 icon: 'md-home',
+    //                 affix: true,
+    //                 breadcrumb: false
+    //             }
+    //         }
+    //     ]
+    // }
     // {
     //     path: '/level',
     //     component: () => import('@/layout/index'),
@@ -119,7 +119,7 @@ export const asyncRouter = [
         component: () => import('@/layout/index'),
         meta: {
             roles: ['admin', 'editor'],
-            title: '数据列表',
+            title: '实地核查',
             icon: 'ios-folder',
             breadcrumb: false
         },
@@ -128,7 +128,7 @@ export const asyncRouter = [
             {
                 path: 'list_info',
                 meta: {
-                    title: '列表',
+                    title: '核查项目',
                     roles: ['editor']
                 },
                 name: 'list_info',
@@ -153,7 +153,7 @@ export const asyncRouter = [
         meta: {
             roles: ['admin', 'editor'],
             title: '统计',
-            icon: 'ios-folder',
+            icon: 'ios-stats',
             breadcrumb: false
         },
         name: 'count',

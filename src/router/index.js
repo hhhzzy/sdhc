@@ -16,7 +16,6 @@ router.beforeEach(async(to, from, next) => {
              * 2.有：已经登录成功 => 只需要跳转路由
              */
             const hasRole = store.state.user.roles && store.state.user.roles.length > 0
-            console.log(hasRole)
             if (hasRole) {
                 next()
             } else {
